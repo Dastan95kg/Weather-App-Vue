@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="outer">
     <form v-on:submit.prevent="getAddressData">
       <h1>Прогноз погоды</h1>
       <vue-google-autocomplete
@@ -95,6 +95,7 @@
           </div>
         </div>
       </div>
+      <Video :definition="weather.definition" :key="weather.definition" />
     </div>
     <div v-else class="mt-3 alert alert-danger">
       Город "{{ citySearch }}"" не найден. Попробуйте еще раз!
@@ -113,6 +114,13 @@ import Wind from "./svg/Wind.vue";
 import Humidity from "./svg/Humidity.vue";
 import Pressure from "./svg/Pressure.vue";
 import Spinner from "./Spinner.vue";
+import Video from "./Video.vue";
+
+import {
+  AddressDataType,
+  PlaceResultType,
+  WeatherType,
+} from "../types/WeatherTypes.js";
 
 export default Vue.extend({
   name: "Weather",
@@ -125,29 +133,33 @@ export default Vue.extend({
     Humidity,
     Pressure,
     Spinner,
+    Video,
   },
   data() {
     return {
-      citySearch: "",
+      citySearch: "" as string,
       weather: {
         cityName: "",
         temperature: 0,
         country: "",
         description: "",
-        feels_like: "",
+        feels_like: 0,
         humidity: 0,
         dayOrNight: "",
         definition: "",
-        windSpeed: "",
-        pressure: "",
-      },
-      address: "",
-      isLoading: false,
-      cityNotFound: false,
+        windSpeed: 0,
+        pressure: 0,
+      } as WeatherType,
+      address: "" as string,
+      isLoading: false as boolean,
+      cityNotFound: false as boolean,
     };
   },
   methods: {
-    getAddressData: function (addressData, placeResultData) {
+    getAddressData: function (
+      addressData: AddressDataType,
+      placeResultData: PlaceResultType
+    ): void {
       this.isLoading = true;
 
       this.citySearch =
@@ -157,11 +169,9 @@ export default Vue.extend({
       if (this.citySearch.trim()) {
         this.weather.country = addressData.country;
         this.getWeather();
-        // console.log("placeResultData", placeResultData);
-        // console.log("addressData", addressData);
       }
     },
-    getWeather: async function () {
+    getWeather: async function (): Promise<void> {
       const key = "97537b038c08a5b312da4e595e6d577e";
       const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.citySearch}&appid=${key}&units=metric&lang=ru`;
 
@@ -204,6 +214,7 @@ export default Vue.extend({
 form {
   background: #96b9ff;
   padding: 20px 15px;
+  height: 140px;
 }
 
 h1 {
@@ -262,5 +273,14 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
   font-size: 13px;
+}
+
+.outer {
+  width: 100%;
+  height: 100vh;
+}
+
+.wrapper {
+  z-index: 999;
 }
 </style>

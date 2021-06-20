@@ -94,11 +94,11 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 
 export default Vue.extend({
   name: "WeatherIcon",
-  props: ["definition"],
+  props: { definition: String },
 });
 </script>
