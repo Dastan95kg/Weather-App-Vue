@@ -173,7 +173,7 @@ export default Vue.extend({
     },
     getWeather: async function (): Promise<void> {
       const key = "97537b038c08a5b312da4e595e6d577e";
-      const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.citySearch}&appid=${key}&units=metric&lang=ru`;
+      const baseUrl = `https://api.openweathermap.org/data/2.5/weather?q=${this.citySearch}&appid=${key}&units=metric&lang=ru`;
 
       const response = await fetch(baseUrl);
 
